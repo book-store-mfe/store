@@ -1,0 +1,33 @@
+<mat-toolbar color="warn">
+  <button mat-button routerLink="/">
+    <mat-icon>book</mat-icon>
+    <span>BookStore</span>
+  </button>
+
+  <span class="spacer"></span>
+
+  <button mat-button routerLink="/account">
+    <mat-icon>person</mat-icon>
+    <span>account</span>
+  </button>
+
+  <button mat-button routerLink="/catalog">
+    <mat-icon>list</mat-icon>
+    <span>catalog</span>
+  </button>
+
+  <span class="divider"></span>
+
+  <div>
+  </div>
+  <span>{{ profile.name() }}</span>
+  <button mat-icon-button >
+  <mat-icon>logout</mat-icon>
+  </button>
+
+</mat-toolbar>
+
+
+<div class="content">
+  <router-outlet />
+</div>
