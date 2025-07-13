@@ -42,7 +42,7 @@ jobs:
             sleep 15
           done
 
-      - name: Trigger central Validate Remotes in reports repo
+      - name: Trigger reports actions in reports repo
         if: steps.wait_for_manifest.outputs.commit_matched == 'true'
         uses: actions/github-script@v7
         with:
@@ -52,6 +52,12 @@ jobs:
               owner: 'book-store-mfe',
               repo: 'reports',
               workflow_id: 'validate-remotes.yml',
+              ref: 'main'
+            })
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'book-store-mfe',
+              repo: 'reports',
+              workflow_id: 'smoke-tests.yml',
               ref: 'main'
             })
 
