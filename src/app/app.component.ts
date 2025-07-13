@@ -33,7 +33,6 @@ export class AppComponent {
   }
 
   switchTheme() {
-    console.log('switchTheme', this.theme())
     this.theme.set(this.theme() === 'dark' ? 'light' : 'dark')
     document.body.style.setProperty('color-scheme', this.theme());
   }
