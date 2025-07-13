@@ -14,4 +14,6 @@
 .content {
   padding: 20px;
   height: calc(100% - 64px);
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
 }

@@ -6,6 +6,7 @@ module.exports = withModuleFederationPlugin({
 
   shared: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    "@bookstore-app/shared-lib": { singleton: true, strictVersion: false, requiredVersion: '~0.0.1' }
   },
 
 });
