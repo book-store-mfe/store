@@ -3,65 +3,78 @@
   "version": "0.0.0",
   "remotes": {
     "account": "https://book-store-mfe.github.io/account/mf-manifest.json",
-    "catalog": "https://book-store-mfe.github.io/catalog/mf-manifest.json",
-    "review": "https://book-store-mfe.github.io/review/mf-manifest.json"
+    "catalog": "https://book-store-mfe.github.io/catalog/mf-manifest.json"
   },
   "dependencies": {
     "@angular-architects/module-federation": {
       "declared": "^19.0.3",
-      "installed": "19.0.3"
+      "installed": "19.0.3",
+      "requiredVersion": null
     },
     "@angular/cdk": {
       "declared": "^19.2.19",
-      "installed": "19.2.19"
+      "installed": "19.2.19",
+      "requiredVersion": null
     },
     "@angular/common": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/compiler": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/core": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/forms": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/material": {
       "declared": "^19.2.19",
-      "installed": "19.2.19"
+      "installed": "19.2.19",
+      "requiredVersion": null
     },
     "@angular/platform-browser": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/platform-browser-dynamic": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@angular/router": {
       "declared": "^19.2.0",
-      "installed": "19.2.14"
+      "installed": "19.2.14",
+      "requiredVersion": null
     },
     "@bookstore-app/shared-lib": {
       "declared": "~0.1.0",
-      "installed": "0.1.0"
+      "installed": "0.1.0",
+      "requiredVersion": "~0.0.1"
     },
     "rxjs": {
       "declared": "~7.8.0",
-      "installed": "7.8.2"
+      "installed": "7.8.2",
+      "requiredVersion": null
     },
     "tslib": {
       "declared": "^2.3.0",
-      "installed": "2.8.1"
+      "installed": "2.8.1",
+      "requiredVersion": null
     },
     "zone.js": {
       "declared": "~0.15.0",
-      "installed": "0.15.1"
+      "installed": "0.15.1",
+      "requiredVersion": null
     }
   }
 }
