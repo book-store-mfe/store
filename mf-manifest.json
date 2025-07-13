@@ -1,7 +1,7 @@
 {
   "name": "store",
   "version": "0.0.0",
-  "id": "d16fe4cf946177beb044b41f87d542fc79bd7a77",
+  "id": "55b0829e618c91eec323efa2e97a0bcc61657b05",
   "remotes": {
     "account": "https://book-store-mfe.github.io/account/mf-manifest.json",
     "catalog": "https://book-store-mfe.github.io/catalog/mf-manifest.json"
