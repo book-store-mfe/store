@@ -1,8 +1,7 @@
 name: Send Report
 
 on:
-  push:
-    branches: [gh-pages]
+  workflow_dispatch:
 
 jobs:
   trigger-report:
@@ -17,6 +16,7 @@ jobs:
           repo="book-store-mfe/store"
           manifest_url="https://book-store-mfe.github.io/store/mf-manifest.json"
 
+          sleep 15
           for attempt in $(seq 1 10); do
             echo "Attempt $attempt: Fetching published manifest..."
             build_commit=$(curl -s $manifest_url | jq -r .id)
