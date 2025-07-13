@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Extract remotes from environment
 function extractRemotesFromEnv(filePath) {
@@ -90,10 +91,26 @@ Object.keys(declaredDeps).forEach(dep => {
   };
 });
 
+// Get latest commit hash from main branch (useful on CI)
+function getLatestMainCommit() {
+  try {
+    // Pega o hash do último commit na main local. Se estiver na CI, garanta que 'main' está atualizado.
+    return execSync('git rev-parse origin/main').toString().trim();
+  } catch (e) {
+    // fallback pra HEAD atual, se estiver rodando só na main
+    try {
+      return execSync('git rev-parse HEAD').toString().trim();
+    } catch (e2) {
+      return null;
+    }
+  }
+}
+
 // Manifest final
 const manifest = {
   name: mfName,
   version: pkg.version,
+  id: getLatestMainCommit(),
   remotes,
   dependencies,
 };

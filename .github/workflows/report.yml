@@ -1,0 +1,60 @@
+name: Send Report
+
+on:
+  push:
+    branches: [gh-pages]
+
+jobs:
+  trigger-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for published manifest (retry up to 10x)
+        id: wait_for_manifest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          repo="book-store-mfe/store"
+          manifest_url="https://book-store-mfe.github.io/store/mf-manifest.json"
+
+          for attempt in $(seq 1 10); do
+            echo "Attempt $attempt: Fetching published manifest..."
+            build_commit=$(curl -s $manifest_url | jq -r .id)
+            echo "build_commit from manifest: $build_commit"
+
+            main_commit=$(curl -s -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$repo/commits/main" | jq -r .sha)
+            echo "HEAD commit from main: $main_commit"
+
+            if [ "$build_commit" = "$main_commit" ] && [ "$build_commit" != "null" ]; then
+              echo "MATCH: Manifest is up to date."
+              echo "commit_matched=true" >> $GITHUB_OUTPUT
+              echo "build_commit=$build_commit" >> $GITHUB_OUTPUT
+              break
+            fi
+
+            if [ "$attempt" -eq 10 ]; then
+              echo "Manifest did not update after $attempt attempts. Skipping trigger."
+              echo "commit_matched=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+            echo "Not matched. Waiting 15s before retry..."
+            sleep 15
+          done
+
+      - name: Trigger central Validate Remotes in reports repo
+        if: steps.wait_for_manifest.outputs.commit_matched == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.BOOKSTORE_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'book-store-mfe',
+              repo: 'reports',
+              workflow_id: 'validate-remotes.yml',
+              ref: 'main'
+            })
+
+      - name: Report if not matched
+        if: steps.wait_for_manifest.outputs.commit_matched != 'true'
+        run: echo "Manifest is not up to date with main after retries. No trigger sent."
