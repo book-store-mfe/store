@@ -1,0 +1,51 @@
+name: Deploy Angular App to GCP via CDN
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      BUCKET_NAME: bookstopre-store
+      PROJECT_ID: bookstore-466211
+      REGION: us-central1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app
+        run: npm run build -- --configuration=production
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init and Apply
+        working-directory: ./terraform
+        run: |
+          terraform init
+          terraform apply -auto-approve \
+            -var="bucket_name=${BUCKET_NAME}" \
+            -var="project_id=${PROJECT_ID}" \
+            -var="region=${REGION}"
+
+      - name: Deploy to GCS bucket
+        run: |
+          gsutil -m rsync -r -d dist/ gs://${{ env.BUCKET_NAME }}
