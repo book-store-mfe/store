@@ -57,3 +57,13 @@ jobs:
       - name: Deploy to GCS bucket
         run: |
           gsutil -m rsync -r -d dist/store gs://${BASE_NAME}-${ENVIRONMENT}
+
+      - name: Disable cache for remoteEntry.js
+        run: |
+          gsutil -q stat gs://${BASE_NAME}-${ENVIRONMENT}/remoteEntry.js && \
+            gsutil setmeta -h "Cache-Control:no-cache, max-age=0" gs://${BASE_NAME}-${ENVIRONMENT}/remoteEntry.js || true
+
+          gcloud compute url-maps describe ${BASE_NAME}-${ENVIRONMENT}-url-map --project=${PROJECT_ID} >/dev/null 2>&1 && \
+            gcloud compute url-maps invalidate-cdn-cache ${BASE_NAME}-${ENVIRONMENT}-url-map \
+              --path "/remoteEntry.js" \
+              --project=${PROJECT_ID} || true
