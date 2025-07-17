@@ -1,11 +1,12 @@
-variable "bucket_name" {
-  default = "bookstore-store"
+variable "project_id" {}
+
+variable "region" { }
+
+variable "environment" {
+  description = "Deployment environment (e.g., dev, staging, prod)"
+  default     = "dev"
 }
 
-variable "project_id" {
-  default = "bookstore-466211"
-}
-
-variable "region" {
-  default = "us-central1"
+variable "base_name" {
+  description = "Base name for all resources"
 }

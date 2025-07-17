@@ -8,9 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BUCKET_NAME: bookstopre-store
+      BASE_NAME: bookstore-store
+      ENVIRONMENT: dev
       PROJECT_ID: bookstore-466211
       REGION: us-central1
+      GCP_STATE_BUCKET: terraform-state-frontend
 
     steps:
       - name: Checkout code
@@ -43,12 +45,15 @@ jobs:
       - name: Terraform Init and Apply
         working-directory: ./terraform
         run: |
-          terraform init
+          terraform init \
+            -backend-config="bucket=${GCP_STATE_BUCKET}" \
+            -backend-config="prefix=projects/${BASE_NAME}/${ENVIRONMENT}/terraform.tfstate"
           terraform apply -auto-approve \
-            -var="bucket_name=${BUCKET_NAME}" \
             -var="project_id=${PROJECT_ID}" \
-            -var="region=${REGION}"
+            -var="region=${REGION}" \
+            -var="base_name=${BASE_NAME}" \
+            -var="environment=${ENVIRONMENT}"
 
       - name: Deploy to GCS bucket
         run: |
-          gsutil -m rsync -r -d dist/store gs://${{ env.BUCKET_NAME }}
+          gsutil -m rsync -r -d dist/store gs://${BASE_NAME}-${ENVIRONMENT}
