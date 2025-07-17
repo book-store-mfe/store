@@ -18,6 +18,14 @@ resource "google_storage_bucket" "static" {
   }
 }
 
+resource "google_storage_bucket_iam_binding" "public_access" {
+  bucket = google_storage_bucket.static.name
+  role   = "roles/storage.objectViewer"
+  members = [
+    "allUsers"
+  ]
+}
+
 resource "google_compute_backend_bucket" "backend" {
   name        = "${var.bucket_name}-backend"
   bucket_name = google_storage_bucket.static.name

@@ -51,4 +51,4 @@ jobs:
 
       - name: Deploy to GCS bucket
         run: |
-          gsutil -m rsync -r -d dist/ gs://${{ env.BUCKET_NAME }}
+          gsutil -m rsync -r -d dist/store gs://${{ env.BUCKET_NAME }}
