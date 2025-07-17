@@ -25,18 +25,19 @@ resource "google_compute_backend_bucket" "backend" {
 }
 
 resource "google_compute_url_map" "url_map" {
-  name                    = "${var.bucket_name}-url-map"
-  default_backend_bucket = google_compute_backend_bucket.backend.name
+  name = "${var.bucket_name}-url-map"
+
+  default_service = google_compute_backend_bucket.backend.id
 }
 
 resource "google_compute_target_http_proxy" "http_proxy" {
-  name   = "${var.bucket_name}-http-proxy"
-  url_map = google_compute_url_map.url_map.self_link
+  name    = "${var.bucket_name}-http-proxy"
+  url_map = google_compute_url_map.url_map.id
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
   name        = "${var.bucket_name}-http-forwarding-rule"
-  target      = google_compute_target_http_proxy.http_proxy.self_link
+  target      = google_compute_target_http_proxy.http_proxy.id
   port_range  = "80"
   ip_address  = google_compute_global_address.ip.address
   ip_protocol = "TCP"
